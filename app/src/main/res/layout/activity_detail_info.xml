@@ -179,32 +179,14 @@
                 android:layout_height="wrap_content"
                 app:tabMode="scrollable"
                 app:tabGravity="center"/>
-            <RelativeLayout
+            <com.yunshuting.eightdiagrams.mv.WrapContentHeightViewPager
+                android:id="@+id/view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="35dp"
-                >
-                <TextView
-                    android:id="@+id/tv_yao_desc"
-                    android:text="descInfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-            </RelativeLayout>
+                android:layout_height="wrap_content"/>
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/block1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/iv_gua"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toBottomOf="parent"/>
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
     </ScrollView>
 

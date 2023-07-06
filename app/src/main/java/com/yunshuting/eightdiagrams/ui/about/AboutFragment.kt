@@ -1,4 +1,4 @@
-package com.yunshuting.eightdiagrams.ui.notifications
+package com.yunshuting.eightdiagrams.ui.about
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.yunshuting.eightdiagrams.PinyinActivity
-import com.yunshuting.eightdiagrams.databinding.FragmentNotificationsBinding
+import com.yunshuting.eightdiagrams.databinding.FragmentAboutBinding
 
-class NotificationsFragment : Fragment() {
+class AboutFragment : Fragment() {
 
-    private var _binding: FragmentNotificationsBinding? = null
+    private var _binding: FragmentAboutBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,7 +25,7 @@ class NotificationsFragment : Fragment() {
 //        val notificationsViewModel =
 //            ViewModelProvider(this).get(NotificationsViewModel::class.java)
 
-        _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        _binding = FragmentAboutBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.tvPinyin.setOnClickListener {
             val intent = Intent(activity, PinyinActivity::class.java)

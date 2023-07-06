@@ -1,4 +1,4 @@
-package com.yunshuting.eightdiagrams.ui.dashboard
+package com.yunshuting.eightdiagrams.ui.gua64list
 
 import android.content.Context
 import android.content.Context.SENSOR_SERVICE
@@ -23,9 +23,8 @@ import com.yunshuting.eightdiagrams.DetailInfoActivity
 import com.yunshuting.eightdiagrams.HomeActivity
 import com.yunshuting.eightdiagrams.R
 import com.yunshuting.eightdiagrams.bean.DiagramBean
-import com.yunshuting.eightdiagrams.databinding.FragmentDashboardBinding
+import com.yunshuting.eightdiagrams.databinding.FragmentGua64Binding
 import com.yunshuting.eightdiagrams.mv.MyDBHelper
-import com.yunshuting.eightdiagrams.mv.MyDatabaseHelper
 import com.yunshuting.eightdiagrams.mv.MyUtils
 import com.yunshuting.eightdiagrams.mv.ShakeDetector
 import java.lang.ref.WeakReference
@@ -35,7 +34,7 @@ import java.util.*
 val START_SHAKE:Int = 1001
 val END_SHAKE:Int = 1002
 var isshake = false
-class DashboardFragment : Fragment(), SensorEventListener {
+class GuaListFragment : Fragment(), SensorEventListener {
     var index = 0;
     var result = intArrayOf(0, 0, 0, 0, 0, 0);
     var upDiagram: DiagramBean? = null;
@@ -46,7 +45,7 @@ class DashboardFragment : Fragment(), SensorEventListener {
     lateinit var mHandler:MyHandler
 
 
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentGua64Binding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -58,7 +57,7 @@ class DashboardFragment : Fragment(), SensorEventListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentGua64Binding.inflate(inflater, container, false)
         val root: View = binding.root
 
         sensorManager = activity?.getSystemService(SENSOR_SERVICE) as SensorManager
@@ -294,12 +293,12 @@ class DashboardFragment : Fragment(), SensorEventListener {
 
     }
 
-    class MyHandler(activity: DashboardFragment) : Handler() {
-        private val mReference: WeakReference<DashboardFragment>
-        private lateinit var mActivity: DashboardFragment
+    class MyHandler(activity: GuaListFragment) : Handler() {
+        private val mReference: WeakReference<GuaListFragment>
+        private lateinit var mActivity: GuaListFragment
 
         init {
-            mReference = WeakReference<DashboardFragment>(activity)
+            mReference = WeakReference<GuaListFragment>(activity)
             if (mReference != null) {
                 mActivity = mReference.get()!!
             }

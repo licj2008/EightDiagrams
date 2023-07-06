@@ -7,11 +7,16 @@ import android.text.TextUtils
 import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabItem
 import com.google.android.material.tabs.TabLayout
 import com.yunshuting.eightdiagrams.databinding.ActivityDetailInfoBinding
 import com.yunshuting.eightdiagrams.mv.MyDBHelper
+import com.yunshuting.eightdiagrams.mv.MyFragmentPagerAdapter
+import com.yunshuting.eightdiagrams.ui.YaoFragment
 import java.io.File
 
 
@@ -153,7 +158,9 @@ class DetailInfoActivity : AppCompatActivity() {
                     "\n\n【解释】:\n" + base_jieshi +
                     "\n\n【哲学含义】:\n" + base_jieshi
 
-            initTab(name)
+//            initTab(name)
+            initTab2(name)
+            binding.viewPager.requestLayout()
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(1))
             binding.tabLayout.selectTab(binding.tabLayout.getTabAt(0))
 
@@ -198,12 +205,54 @@ class DetailInfoActivity : AppCompatActivity() {
             .into(imageView)
     }
 
+    private fun initTab2(name:String) {
+        val viewPager = findViewById<ViewPager>(R.id.view_pager)
+        val Fragment1 = YaoFragment()
+        val Fragment2 = YaoFragment()
+        val Fragment3 = YaoFragment()
+        val Fragment4 = YaoFragment()
+        val Fragment5 = YaoFragment()
+        val Fragment6 = YaoFragment()
+        val Fragment7 = YaoFragment()
+        Fragment1.initData(yao1,curGuaNum,1)
+        Fragment2.initData(yao2,curGuaNum,2)
+        Fragment3.initData(yao3,curGuaNum,3)
+        Fragment4.initData(yao4,curGuaNum,4)
+        Fragment5.initData(yao5,curGuaNum,5)
+        Fragment6.initData(yao6,curGuaNum,6)
+        Fragment7.initData(yao7,curGuaNum,7)
+        //Fragment.newInstance("111")
+        var fragments = listOf(Fragment1, Fragment2, Fragment3,Fragment4,Fragment5,Fragment6)
+        var titles = listOf(getYaoTitle(name,1), getYaoTitle(name,2), getYaoTitle(name,3)
+            , getYaoTitle(name,4), getYaoTitle(name,5), getYaoTitle(name,6))
+        if(TextUtils.equals("乾卦",name) || TextUtils.equals("坤卦",name)) {
+            fragments = listOf(Fragment1, Fragment2, Fragment3,Fragment4,Fragment5,Fragment6,Fragment7)
+            titles = listOf(getYaoTitle(name,1), getYaoTitle(name,2), getYaoTitle(name,3)
+                , getYaoTitle(name,4), getYaoTitle(name,5), getYaoTitle(name,6),getYaoTitle(name,7))
+        }
+
+        val adapter = MyFragmentPagerAdapter(supportFragmentManager, fragments, titles)
+        viewPager.adapter = adapter
+        binding.tabLayout.setupWithViewPager(viewPager)
+    }
+
+    private fun getYaoTitle(name:String,index:Int):String {
+        if (index == 7) {
+            if (name == "乾卦") {
+                return "用九"
+            }
+            if (name == "坤卦") {
+                return "用六"
+            }
+        }
+        return  "第${index}爻"
+    }
     private fun initTab(name:String) {
         binding.tabLayout.removeAllTabs()
         for (i in 1..6) {
             val tab = binding.tabLayout.newTab()
             val tabItem = TabItem(this)
-            tab.text = "第${i}爻"
+             tab.text = "第${i}爻"
             binding.tabLayout.addTab(tab)
         }
         if (name == "乾卦") {
@@ -216,70 +265,70 @@ class DetailInfoActivity : AppCompatActivity() {
             tab.text = "用六"
             binding.tabLayout.addTab(tab)
         }
-        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                var bianId = 0
-                var drawname=""
-                var html = ""
-                when(tab?.position ?: 0){
-                    0-> {
-                        html = yao1
-                        drawname = "gua"+curGuaNum.toString()+"_1"
-                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-                    }
-                    1-> {
-                        html = yao2
-                        drawname = "gua"+curGuaNum.toString()+"_2"
-                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-                    }
-                    2-> {
-                        html = yao3
-                        drawname = "gua"+curGuaNum.toString()+"_3"
-                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-                    }
-                   3-> {
-                       html = yao4
-                       drawname = "gua"+curGuaNum.toString()+"_4"
-                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-                    }
-                    4-> {
-                        html = yao5
-                        drawname = "gua"+curGuaNum.toString()+"_5"
-                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-                    }
-                    5-> {
-                        html = yao6
-                        drawname = "gua"+curGuaNum.toString()+"_6"
-                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-                    }
-                    6-> {
-                        html = yao7
-                    }
-                }
-                if (bianId > 0) {
-                    html = ChangeImg(html, drawname)
-                    val text: CharSequence =
-                        Html.fromHtml(html, Html.ImageGetter { source -> //根据图片资源ID获取图片
-                            Log.d("source", source)
-                            //换资源
-                            if (source == "‘myimage’") {
-                                val draw = resources.getDrawable(bianId)
-                                draw.setBounds(0, 0, draw.intrinsicWidth, draw.intrinsicHeight)
-                                return@ImageGetter draw
-                            }
-                            null
-                        }, null)
-                    binding.tvYaoDesc.setText(text)
-                } else {
-                    binding.tvYaoDesc.setText(html)
-                }
-
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
-        })
+//        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//            override fun onTabSelected(tab: TabLayout.Tab?) {
+//                var bianId = 0
+//                var drawname=""
+//                var html = ""
+//                when(tab?.position ?: 0){
+//                    0-> {
+//                        html = yao1
+//                        drawname = "gua"+curGuaNum.toString()+"_1"
+//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
+//                    }
+//                    1-> {
+//                        html = yao2
+//                        drawname = "gua"+curGuaNum.toString()+"_2"
+//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
+//                    }
+//                    2-> {
+//                        html = yao3
+//                        drawname = "gua"+curGuaNum.toString()+"_3"
+//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
+//                    }
+//                   3-> {
+//                       html = yao4
+//                       drawname = "gua"+curGuaNum.toString()+"_4"
+//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
+//                    }
+//                    4-> {
+//                        html = yao5
+//                        drawname = "gua"+curGuaNum.toString()+"_5"
+//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
+//                    }
+//                    5-> {
+//                        html = yao6
+//                        drawname = "gua"+curGuaNum.toString()+"_6"
+//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
+//                    }
+//                    6-> {
+//                        html = yao7
+//                    }
+//                }
+//                if (bianId > 0) {
+//                    html = ChangeImg(html, drawname)
+//                    val text: CharSequence =
+//                        Html.fromHtml(html, Html.ImageGetter { source -> //根据图片资源ID获取图片
+//                            Log.d("source", source)
+//                            //换资源
+//                            if (source == "‘myimage’") {
+//                                val draw = resources.getDrawable(bianId)
+//                                draw.setBounds(0, 0, draw.intrinsicWidth, draw.intrinsicHeight)
+//                                return@ImageGetter draw
+//                            }
+//                            null
+//                        }, null)
+//                    //binding.tvYaoDesc.setText(text)
+//                } else {
+//                    //binding.tvYaoDesc.setText(html)
+//                }
+//
+//            }
+//
+//            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+//
+//            override fun onTabReselected(tab: TabLayout.Tab?) {}
+//        })
 
     }
 

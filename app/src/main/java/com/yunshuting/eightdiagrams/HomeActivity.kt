@@ -5,13 +5,7 @@ import android.widget.Toast
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.yunshuting.eightdiagrams.databinding.ActivityHomeBinding
-import com.yunshuting.eightdiagrams.ui.dashboard.DashboardFragment
-import com.yunshuting.eightdiagrams.ui.home.HomeFragment
-import com.yunshuting.eightdiagrams.ui.notifications.NotificationsFragment
 import java.text.SimpleDateFormat
 import java.util.*
 
