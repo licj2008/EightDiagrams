@@ -1,4 +1,4 @@
-package com.yunshuting.eightdiagrams.ui.gua64list
+package com.yunshuting.eightdiagrams.ui.yao1yao
 
 import android.content.Context
 import android.content.Context.SENSOR_SERVICE
@@ -23,7 +23,7 @@ import com.yunshuting.eightdiagrams.DetailInfoActivity
 import com.yunshuting.eightdiagrams.HomeActivity
 import com.yunshuting.eightdiagrams.R
 import com.yunshuting.eightdiagrams.bean.DiagramBean
-import com.yunshuting.eightdiagrams.databinding.FragmentGua64Binding
+import com.yunshuting.eightdiagrams.databinding.FragmentYao1yaoBinding
 import com.yunshuting.eightdiagrams.mv.MyDBHelper
 import com.yunshuting.eightdiagrams.mv.MyUtils
 import com.yunshuting.eightdiagrams.mv.ShakeDetector
@@ -34,7 +34,7 @@ import java.util.*
 val START_SHAKE:Int = 1001
 val END_SHAKE:Int = 1002
 var isshake = false
-class GuaListFragment : Fragment(), SensorEventListener {
+class Yao1YaoFragment : Fragment(), SensorEventListener {
     var index = 0;
     var result = intArrayOf(0, 0, 0, 0, 0, 0);
     var upDiagram: DiagramBean? = null;
@@ -45,7 +45,7 @@ class GuaListFragment : Fragment(), SensorEventListener {
     lateinit var mHandler:MyHandler
 
 
-    private var _binding: FragmentGua64Binding? = null
+    private var _binding: FragmentYao1yaoBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -57,7 +57,7 @@ class GuaListFragment : Fragment(), SensorEventListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentGua64Binding.inflate(inflater, container, false)
+        _binding = FragmentYao1yaoBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         sensorManager = activity?.getSystemService(SENSOR_SERVICE) as SensorManager
@@ -293,12 +293,12 @@ class GuaListFragment : Fragment(), SensorEventListener {
 
     }
 
-    class MyHandler(activity: GuaListFragment) : Handler() {
-        private val mReference: WeakReference<GuaListFragment>
-        private lateinit var mActivity: GuaListFragment
+    class MyHandler(activity: Yao1YaoFragment) : Handler() {
+        private val mReference: WeakReference<Yao1YaoFragment>
+        private lateinit var mActivity: Yao1YaoFragment
 
         init {
-            mReference = WeakReference<GuaListFragment>(activity)
+            mReference = WeakReference<Yao1YaoFragment>(activity)
             if (mReference != null) {
                 mActivity = mReference.get()!!
             }

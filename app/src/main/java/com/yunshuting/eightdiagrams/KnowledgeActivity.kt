@@ -3,13 +3,12 @@ package com.yunshuting.eightdiagrams
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import kotlinx.android.synthetic.main.activity_pinyin.*
-import kotlinx.android.synthetic.main.gua_item_layout.view.*
+import kotlinx.android.synthetic.main.activity_knowledge.*
 
-class PinyinActivity : AppCompatActivity() {
+class KnowledgeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pinyin)
+        setContentView(R.layout.activity_knowledge)
         supportActionBar?.apply {
             title = "周易知识简介"
         }

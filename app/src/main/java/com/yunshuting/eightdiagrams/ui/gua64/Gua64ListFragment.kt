@@ -1,4 +1,4 @@
-package com.yunshuting.eightdiagrams.ui.home
+package com.yunshuting.eightdiagrams.ui.gua64
 
 import android.os.Bundle
 import android.util.Log
@@ -8,14 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yunshuting.eightdiagrams.bean.DiagramBean
-import com.yunshuting.eightdiagrams.databinding.FragmentHomeBinding
+import com.yunshuting.eightdiagrams.databinding.FragmentGua64listBinding
 import com.yunshuting.eightdiagrams.mv.MyAdapter
 import com.yunshuting.eightdiagrams.mv.MyDBHelper
 import kotlinx.android.synthetic.main.fragment_main.*
 
-class HomeFragment : Fragment() {
+class Gua64ListFragment : Fragment() {
     var dataList =ArrayList<DiagramBean>()
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentGua64listBinding? = null
     lateinit var madapter:MyAdapter
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
 //        val homeViewModel =
 //            ViewModelProvider(this).get(HomeViewModel::class.java)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentGua64listBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
 

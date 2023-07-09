@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.yunshuting.eightdiagrams.PinyinActivity
+import com.yunshuting.eightdiagrams.KnowledgeActivity
 import com.yunshuting.eightdiagrams.databinding.FragmentAboutBinding
 
 class AboutFragment : Fragment() {
@@ -28,7 +28,7 @@ class AboutFragment : Fragment() {
         _binding = FragmentAboutBinding.inflate(inflater, container, false)
         val root: View = binding.root
         binding.tvPinyin.setOnClickListener {
-            val intent = Intent(activity, PinyinActivity::class.java)
+            val intent = Intent(activity, KnowledgeActivity::class.java)
             startActivity(intent)
         }
         return root

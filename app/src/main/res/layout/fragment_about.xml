@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_pinyin"
-            android:text="周易64卦知识      >>>"
+            android:text="周易知识      >>"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

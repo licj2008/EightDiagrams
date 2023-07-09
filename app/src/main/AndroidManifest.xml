@@ -15,7 +15,7 @@
         android:theme="@style/Theme.EightDiagrams"
         tools:targetApi="31">
         <activity
-            android:name=".PinyinActivity"
+            android:name=".KnowledgeActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity

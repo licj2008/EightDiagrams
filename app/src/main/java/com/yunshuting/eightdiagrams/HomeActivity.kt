@@ -1,19 +1,21 @@
 package com.yunshuting.eightdiagrams
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.widget.Toast
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yunshuting.eightdiagrams.databinding.ActivityHomeBinding
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityHomeBinding
     var mIsTryUse = true
     var isYaoGuaing = false
+    var mExitTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         getSupportActionBar()?.run {
@@ -93,7 +95,7 @@ class HomeActivity : AppCompatActivity() {
     fun isTryVersion() {
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         val currentDate = sdf.format(Date())
-        val targetDate = "2023-12-01"
+        val targetDate = "2023-12-31"
         val compareResult = currentDate.compareTo(targetDate)
         println("当前日期为：$currentDate")
         println("目标日期为：$targetDate")
@@ -112,5 +114,20 @@ class HomeActivity : AppCompatActivity() {
 
     fun setYaoing(b:Boolean) {
         isYaoGuaing = b
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        //首先判断用户有没有按下返回键
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            //判断用户按下的时间是不是大于2秒，如果大于2秒则认为是失误操作
+            if (System.currentTimeMillis() - mExitTime > 2000) {
+                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show()
+                mExitTime = System.currentTimeMillis() //记住当前时间，下次再按返回键时做对比
+            } else {
+                finish()
+            }
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
     }
 }

@@ -7,15 +7,15 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.yunshuting.eightdiagrams.ui.home.HomeFragment"
+        android:name="com.yunshuting.eightdiagrams.ui.gua64.Gua64ListFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_gua64list" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.yunshuting.eightdiagrams.ui.gua64list.GuaListFragment"
+        android:name="com.yunshuting.eightdiagrams.ui.yao1yao.Yao1YaoFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_gua64" />
+        tools:layout="@layout/fragment_yao1yao" />
 
     <fragment
         android:id="@+id/navigation_notifications"

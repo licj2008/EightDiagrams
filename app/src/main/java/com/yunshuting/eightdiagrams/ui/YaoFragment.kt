@@ -43,7 +43,7 @@ class YaoFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentYaoBinding.inflate(layoutInflater)
-
+        showYaoInfo()
 //        View view = binding.getRoot()
         //return inflater.inflate(R.layout.fragment_yao, container, false)
         return binding.root
@@ -52,11 +52,15 @@ class YaoFragment : Fragment() {
     fun initData(info: String,curGuaNum:Int,yaoIndex: Int) {
         param1 = info
         drawname = "gua"+curGuaNum.toString()+"_"+yaoIndex.toString()
+
     }
 
     override fun onResume() {
         super.onResume()
 
+    }
+
+    private fun showYaoInfo() {
         val bianId = getResources().getIdentifier(drawname,"drawable",activity?.packageName)
         val html = ChangeImg(param1!!, drawname!!)
         val text: CharSequence =
