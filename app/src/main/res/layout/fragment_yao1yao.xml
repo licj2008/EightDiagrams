@@ -10,8 +10,8 @@
         android:id="@+id/result_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:layout_marginTop="10dp"
+        android:text=""
+        android:layout_marginTop="35dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/reset_button" />
@@ -23,6 +23,13 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/result_text"
         app:layout_constraintRight_toRightOf="parent"/>
+    <TextView
+        android:id="@+id/tv_6yao_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/reset_button"/>
     <TextView
         android:id="@+id/tv_poem"
         android:layout_width="match_parent"
@@ -36,6 +43,7 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <LinearLayout
+        android:id="@+id/ll_coins"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"

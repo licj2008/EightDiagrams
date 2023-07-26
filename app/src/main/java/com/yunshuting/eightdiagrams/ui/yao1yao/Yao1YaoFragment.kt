@@ -36,7 +36,7 @@ val END_SHAKE:Int = 1002
 var isshake = false
 class Yao1YaoFragment : Fragment(), SensorEventListener {
     var index = 0;
-    var result = intArrayOf(0, 0, 0, 0, 0, 0);
+    var result = intArrayOf(-1, -1, -1, -1, -1, -1);
     var upDiagram: DiagramBean? = null;
     var downDiagram: DiagramBean? = null;
     lateinit var sensorManager: SensorManager
@@ -94,14 +94,37 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
     }
     private fun reset() {
         index = 0;
-        result = intArrayOf(0, 0, 0, 0, 0, 0);
+        result = intArrayOf(-1, -1, -1, -1, -1, -1);
         upDiagram = null;
         downDiagram = null;
         binding.resultText.text ="静心诚意，摇6次得一卦"
         binding.tvPoem.text = ""
+        binding.tv6yaoList.text = "[]"
         binding.ivZygua.visibility = View.GONE
         (activity as HomeActivity).setYaoing(false)
+        binding.llCoins.visibility = View.VISIBLE
 
+    }
+
+    /**
+     * 摇卦中，每一次摇得阴阳情况进行显示
+     */
+    private fun showRealTimeYao() {
+        var s ="";
+        for(item in result) {
+            var curYaoName = " "
+            if(item == -1){
+                curYaoName = " "
+            } else if(item == 0){
+                curYaoName = "阴"
+            } else if(item == 1){
+                curYaoName = "阳"
+            }
+            s += curYaoName
+            s += ","
+        }
+        s = s.substring(0,s.length-1)
+        binding.tv6yaoList.text = "[" + s + "]"
     }
 
     public fun shake(){
@@ -133,7 +156,6 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             val curValue = getResultText(coin1, coin2, coin3)
             val curYao :String = if (curValue==1) "阳" else "阴";
             result.set(index-1,curValue)
-
             binding.resultText.text ="第 $index 次 共6次("+curYao+")"
         }
         Log.d("licj","cur index 7777 ="+index);
@@ -145,7 +167,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             val curbin = result.get(5).toString()+result.get(4).toString()+result.get(3).toString();
             upDiagram = MyUtils.getDagramByNo(MyUtils.getDiagramNoByYao(curbin));
         }
-
+        showRealTimeYao()
         //Log.d("licj",result.toList().toString());
         if (upDiagram != null && downDiagram != null){
             getDataByUpdown(upDiagram?.DiagramName+"上"+downDiagram?.DiagramName+"下");
@@ -227,6 +249,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             // Handle query result here.
             binding.resultText.text = binding.resultText.text.toString() +"\n摇中：" +name
             showPoem(guaxiang)
+            binding.llCoins.visibility = View.GONE
         }
 
         cursor.close()
