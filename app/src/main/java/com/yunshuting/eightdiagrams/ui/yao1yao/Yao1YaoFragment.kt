@@ -83,7 +83,9 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             sensorManager.registerListener(this, mAccelerometerSensor, SensorManager.SENSOR_DELAY_UI);
         }
         mHandler = MyHandler(this)
-        reset()
+        if (!(activity as HomeActivity).isYaoGuaing) {
+            reset()
+        }
 
     }
 

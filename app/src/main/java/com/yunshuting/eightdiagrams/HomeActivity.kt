@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yunshuting.eightdiagrams.databinding.ActivityHomeBinding
 import java.text.SimpleDateFormat
@@ -48,6 +50,7 @@ class HomeActivity : AppCompatActivity() {
                 R.id.navigation_home -> {
                     if(isYaoGuaing) {
                         Toast.makeText(this, "摇卦中", Toast.LENGTH_SHORT).show()
+                        return@setOnNavigationItemSelectedListener false
                     } else {
                         navController.navigate(R.id.navigation_home)
                     }
@@ -57,6 +60,7 @@ class HomeActivity : AppCompatActivity() {
                     // 处理"搜索"选项的点击事件
                     if(isYaoGuaing) {
                         //Toast.makeText(this, "摇卦中", Toast.LENGTH_SHORT).show()
+                        return@setOnNavigationItemSelectedListener false
                     } else {
                         navController.navigate(R.id.navigation_dashboard)
                     }
@@ -71,6 +75,8 @@ class HomeActivity : AppCompatActivity() {
                     // 处理"个人资料"选项的点击事件
                     if(isYaoGuaing) {
                         Toast.makeText(this, "摇卦中", Toast.LENGTH_SHORT).show()
+                        return@setOnNavigationItemSelectedListener false
+                        false
                     } else {
                         navController.navigate(R.id.navigation_notifications)
                     }
@@ -85,6 +91,12 @@ class HomeActivity : AppCompatActivity() {
             }
         }
         isTryVersion()
+        //
+        navController.navigate(R.id.navigation_dashboard)
+        // 在进行页面切换后
+        val destinationId = R.id.navigation_dashboard // 获取目标Fragment的ID
+        val menuItem = navView.menu.findItem(destinationId) // 获取对应的菜单项
+        menuItem?.setChecked(true) // 设置菜单项为选中状态
     }
 
     //判断是否在试用期
