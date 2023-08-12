@@ -1,32 +1,49 @@
 package com.yunshuting.eightdiagrams.ui.yao1yao
 
+import android.Manifest
+import android.app.Activity
+import android.content.ContentValues
 import android.content.Context
 import android.content.Context.SENSOR_SERVICE
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.Handler
 import android.os.Message
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.yunshuting.eightdiagrams.DetailInfoActivity
 import com.yunshuting.eightdiagrams.HomeActivity
 import com.yunshuting.eightdiagrams.R
 import com.yunshuting.eightdiagrams.bean.DiagramBean
 import com.yunshuting.eightdiagrams.databinding.FragmentYao1yaoBinding
+import com.yunshuting.eightdiagrams.mv.DateUtil
 import com.yunshuting.eightdiagrams.mv.MyDBHelper
 import com.yunshuting.eightdiagrams.mv.MyUtils
 import com.yunshuting.eightdiagrams.mv.ShakeDetector
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.lang.ref.WeakReference
 import java.util.*
 
@@ -77,6 +94,9 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         binding.resetButton.setOnClickListener {
             reset();
         }
+        binding.downloadButton.setOnClickListener {
+            downloadPic();
+        }
         MyUtils.initDagramsData()
         val mAccelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (mAccelerometerSensor != null) {
@@ -105,9 +125,17 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         binding.ivZygua.visibility = View.GONE
         (activity as HomeActivity).setYaoing(false)
         binding.llCoins.visibility = View.VISIBLE
-
+        binding.clDownload.visibility = View.GONE
+        binding.downloadButton.visibility = View.GONE
     }
 
+    fun downloadPic() {
+        //val view = YourView(context) // 替换为你的视图
+        val view = binding.clDownload // 替换为你的视图
+        val bitmap = generateBitmapFromView(view)
+        //saveBitmapToGallery(requireContext(), bitmap, "image.png")
+        saveImageToGallery(requireContext(),bitmap)
+    }
     /**
      * 摇卦中，每一次摇得阴阳情况进行显示
      */
@@ -133,6 +161,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         if (index > 5) {
             Toast.makeText(activity,"卦已成，请先点“重新开始”！",Toast.LENGTH_LONG).show()
             (activity as HomeActivity).setYaoing(false)
+
             return
         }
 
@@ -168,6 +197,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         if (index > 5) {
             val curbin = result.get(5).toString()+result.get(4).toString()+result.get(3).toString();
             upDiagram = MyUtils.getDagramByNo(MyUtils.getDiagramNoByYao(curbin));
+            binding.clDownload.visibility = View.VISIBLE
         }
         showRealTimeYao()
         //Log.d("licj",result.toList().toString());
@@ -251,6 +281,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             // Handle query result here.
             binding.resultText.text = binding.resultText.text.toString() +"\n摇中：" +name
             showPoem(guaxiang)
+            showDownloadCard()
             binding.llCoins.visibility = View.GONE
         }
 
@@ -277,6 +308,29 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             }
         }
         runnable.run()
+    }
+
+    fun showDownloadCard() {
+        //val layoutParams = binding.ivBg.imageView.layoutParams
+        val imageWidth = getScreenWidth(requireContext());
+        val imageHeight = imageWidth * 10 / 16
+
+        Glide.with(binding.ivBg.context)
+            .load(R.drawable.card_bg)
+            .fitCenter()
+            .override(imageWidth,imageHeight)
+            .into(binding.ivBg)
+
+        binding.tvDlDate.text = DateUtil.getCurTime()
+        binding.tvBottom.text ="《易经卜卦》"
+        binding.downloadButton.visibility = View.VISIBLE
+    }
+
+    fun getScreenWidth(context: Context): Int {
+        val windowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val displayMetrics = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
+        return displayMetrics.widthPixels
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -312,6 +366,90 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         }
 
 
+    }
+
+    // 生成视图的Bitmap
+    fun generateBitmapFromView(view: View): Bitmap {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
+    }
+
+    // 保存Bitmap到相册
+//    fun saveBitmapToGallery(context: Context, bitmap: Bitmap, fileName: String) {
+//        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+//        val imageFile = File(storageDir, fileName)
+//
+//        try {
+//            val outputStream: OutputStream = FileOutputStream(imageFile)
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+//            outputStream.flush()
+//            outputStream.close()
+//
+//            // 通知图库更新
+//            context.sendBroadcast(android.content.Intent(android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+//                android.net.Uri.fromFile(imageFile)))
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+//    }
+
+    fun saveImageToGallery(context: Context, bitmap: Bitmap): Boolean {
+        // 检查是否有写入外部存储的权限
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            // 如果没有权限，则申请权限
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                1
+            )
+            return false
+        }
+
+        // 创建保存图片的目录
+        val galleryDirectory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            "YourAppName"
+        )
+
+        // 如果目录不存在，则创建目录
+        if (!galleryDirectory.exists()) {
+            galleryDirectory.mkdirs()
+        }
+
+        // 生成图片文件名
+        //val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val timeStamp: String = "abc"
+        val fileName = "IMG_$timeStamp.jpg"
+
+        // 保存图片到指定路径
+        val file = File(galleryDirectory, fileName)
+        try {
+            val outputStream: OutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream.flush()
+            outputStream.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return false
+        }
+
+        // 将图片添加到相册媒体库
+        val values = ContentValues().apply {
+            put(MediaStore.Images.Media.DATA, file.absolutePath)
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+            put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
+        }
+
+        context.contentResolver.insert(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            values
+        )
+
+        return true
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
