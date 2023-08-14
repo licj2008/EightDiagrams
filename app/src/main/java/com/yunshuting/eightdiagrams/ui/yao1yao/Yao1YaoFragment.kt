@@ -45,6 +45,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
 import java.lang.ref.WeakReference
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -121,7 +122,6 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         downDiagram = null;
         binding.resultText.text ="静心诚意，摇6次得一卦"
         binding.tvPoem.text = ""
-        binding.tv6yaoList.text = "[]"
         binding.ivZygua.visibility = View.GONE
         (activity as HomeActivity).setYaoing(false)
         binding.llCoins.visibility = View.VISIBLE
@@ -130,16 +130,19 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
     }
 
     fun downloadPic() {
-        //val view = YourView(context) // 替换为你的视图
         val view = binding.clDownload // 替换为你的视图
         val bitmap = generateBitmapFromView(view)
         //saveBitmapToGallery(requireContext(), bitmap, "image.png")
-        saveImageToGallery(requireContext(),bitmap)
+        //saveImageToGallery(requireContext(),bitmap)
+        //saveImageToGallery(bitmap,requireContext())
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val fileName = "IMG_$timeStamp.jpg"
+        saveBitmapToGallery(requireContext(),bitmap,fileName)
     }
     /**
      * 摇卦中，每一次摇得阴阳情况进行显示
      */
-    private fun showRealTimeYao() {
+    private fun showRealTimeYao() :String{
         var s ="";
         for(item in result) {
             var curYaoName = " "
@@ -154,7 +157,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             s += ","
         }
         s = s.substring(0,s.length-1)
-        binding.tv6yaoList.text = "[" + s + "]"
+        return "[" + s + "]"
     }
 
     public fun shake(){
@@ -188,6 +191,8 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             val curYao :String = if (curValue==1) "阳" else "阴";
             result.set(index-1,curValue)
             binding.resultText.text ="第 $index 次 共6次("+curYao+")"
+
+            binding.resultText.text = binding.resultText.text.toString() + showRealTimeYao()
         }
         Log.d("licj","cur index 7777 ="+index);
         if (index > 2){
@@ -199,7 +204,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             upDiagram = MyUtils.getDagramByNo(MyUtils.getDiagramNoByYao(curbin));
             binding.clDownload.visibility = View.VISIBLE
         }
-        showRealTimeYao()
+        //showRealTimeYao()
         //Log.d("licj",result.toList().toString());
         if (upDiagram != null && downDiagram != null){
             getDataByUpdown(upDiagram?.DiagramName+"上"+downDiagram?.DiagramName+"下");
@@ -273,7 +278,12 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             val imgid= getResources().getIdentifier("gua"+id.toString(),"drawable",requireContext().packageName)
             binding.ivZygua.setImageResource(imgid)
             binding.ivZygua.visibility = View.VISIBLE
-            binding.ivZygua.setOnClickListener {
+//            binding.ivZygua.setOnClickListener {
+//                val intent = Intent( binding.ivZygua?.context, DetailInfoActivity::class.java)
+//                intent.putExtra("guaNum", id)
+//                binding.ivZygua?.context?.startActivity(intent)
+//            }
+            binding.clDownload.setOnClickListener {
                 val intent = Intent( binding.ivZygua?.context, DetailInfoActivity::class.java)
                 intent.putExtra("guaNum", id)
                 binding.ivZygua?.context?.startActivity(intent)
@@ -376,84 +386,45 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         return bitmap
     }
 
-    // 保存Bitmap到相册
-//    fun saveBitmapToGallery(context: Context, bitmap: Bitmap, fileName: String) {
-//        val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-//        val imageFile = File(storageDir, fileName)
-//
-//        try {
-//            val outputStream: OutputStream = FileOutputStream(imageFile)
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
-//            outputStream.flush()
-//            outputStream.close()
-//
-//            // 通知图库更新
-//            context.sendBroadcast(android.content.Intent(android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
-//                android.net.Uri.fromFile(imageFile)))
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//        }
-//    }
-
-    fun saveImageToGallery(context: Context, bitmap: Bitmap): Boolean {
-        // 检查是否有写入外部存储的权限
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            != PackageManager.PERMISSION_GRANTED
-        ) {
-            // 如果没有权限，则申请权限
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                1
-            )
-            return false
-        }
-
-        // 创建保存图片的目录
-        val galleryDirectory = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            "YourAppName"
-        )
-
-        // 如果目录不存在，则创建目录
-        if (!galleryDirectory.exists()) {
-            galleryDirectory.mkdirs()
-        }
-
-        // 生成图片文件名
-        //val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        val timeStamp: String = "abc"
-        val fileName = "IMG_$timeStamp.jpg"
-
-        // 保存图片到指定路径
-        val file = File(galleryDirectory, fileName)
-        try {
-            val outputStream: OutputStream = FileOutputStream(file)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            outputStream.flush()
-            outputStream.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return false
-        }
-
-        // 将图片添加到相册媒体库
-        val values = ContentValues().apply {
-            put(MediaStore.Images.Media.DATA, file.absolutePath)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
-            put(MediaStore.Images.Media.DATE_ADDED, System.currentTimeMillis() / 1000)
-        }
-
-        context.contentResolver.insert(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            values
-        )
-
-        return true
-    }
-
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
 
+    }
+
+    fun saveBitmapToGallery(context: Context, bitmap: Bitmap, fileName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentResolver = context.contentResolver
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/png")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
+            }
+            val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            imageUri?.let {
+                val outputStream: OutputStream? = contentResolver.openOutputStream(it)
+                outputStream?.use { stream ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                    stream.flush()
+                    Toast.makeText(requireContext(),"已保存到相册！",Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else {
+            val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
+            val imageFile = File(storageDir, fileName)
+
+            try {
+                val outputStream: OutputStream = FileOutputStream(imageFile)
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                outputStream.flush()
+                outputStream.close()
+
+                // 通知图库更新
+                context.sendBroadcast(android.content.Intent(android.content.Intent.ACTION_MEDIA_SCANNER_SCAN_FILE,
+                    android.net.Uri.fromFile(imageFile)))
+                Toast.makeText(requireContext(),"已保存到相册！！",Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     class MyHandler(activity: Yao1YaoFragment) : Handler() {
