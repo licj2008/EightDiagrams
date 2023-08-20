@@ -10,12 +10,7 @@ import java.io.IOException
 object MyDBHelper {
     val DB_NAME = "zhouyi.db";
     const val TABLE_NAME = "zhouyi_html"
-//    lateinit var mContext:Context;
-    /*选择题的集合*/
-//    public List<Bean> mBeanLists = new ArrayList<Bean>();
-//     MyDBHelper(mContext:Context) {
-//        this.mContext = mContext;
-//    }
+
     //把assets目录下的db文件复制到dbpath下
     fun getDatabase(mContext:Context) :SQLiteDatabase {
 //        val dbPath1 = Environment.getExternalStorageDirectory().getAbsolutePath() + "/databases/" + DB_NAME;

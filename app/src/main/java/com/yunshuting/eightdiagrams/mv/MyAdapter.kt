@@ -35,9 +35,6 @@ class MyAdapter(private val dataList: List<DiagramBean>) : RecyclerView.Adapter<
         fun bind(data: DiagramBean) {
             // Bind data to views here
             val imgId = mContext?.getResources()?.getIdentifier("gua"+data.DiagramNum.toString(),"drawable",mContext?.packageName)
-//            imgId?.apply {
-//                itemView.imageView.setImageResource(imgId)
-//            }
 
             val layoutParams = itemView.imageView.layoutParams
             val imageWidth = layoutParams.width;

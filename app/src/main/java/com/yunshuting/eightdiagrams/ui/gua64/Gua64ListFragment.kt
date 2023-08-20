@@ -26,8 +26,6 @@ class Gua64ListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        val homeViewModel =
-//            ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentGua64listBinding.inflate(inflater, container, false)
         val root: View = binding.root

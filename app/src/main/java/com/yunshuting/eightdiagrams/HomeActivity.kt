@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.yunshuting.eightdiagrams.databinding.ActivityHomeBinding
 import java.text.SimpleDateFormat
@@ -28,22 +26,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val navView: BottomNavigationView = binding.navView
-
-
         val navController = findNavController(R.id.nav_host_fragment_activity_home)
-
-//        // Passing each menu ID as a set of Ids because each
-//        // menu should be considered as top level destinations.
-//        val appBarConfiguration = AppBarConfiguration(
-//            setOf(
-//                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-//            )
-//        )
-//
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        navView.setupWithNavController(navController)
-
-
 
         navView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -65,10 +48,6 @@ class HomeActivity : AppCompatActivity() {
                         navController.navigate(R.id.navigation_dashboard)
                     }
 
-//                    val fragment = DashboardFragment()
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.nav_host_fragment_activity_home, fragment, fragment.javaClass.canonicalName)
-//                        .commit()
                     true
                 }
                 R.id.navigation_notifications -> {
@@ -81,10 +60,6 @@ class HomeActivity : AppCompatActivity() {
                         navController.navigate(R.id.navigation_notifications)
                     }
 
-//                    val fragment = NotificationsFragment()
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.nav_host_fragment_activity_home, fragment, fragment.javaClass.simpleName)
-//                        .commit()
                     true
                 }
                 else -> false

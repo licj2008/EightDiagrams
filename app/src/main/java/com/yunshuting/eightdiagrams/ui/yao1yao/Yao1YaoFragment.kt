@@ -1,7 +1,6 @@
 package com.yunshuting.eightdiagrams.ui.yao1yao
 
 import android.Manifest
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.SENSOR_SERVICE
@@ -51,6 +50,7 @@ import java.util.*
 
 val START_SHAKE:Int = 1001
 val END_SHAKE:Int = 1002
+val RequestCode:Int = 1003
 var isshake = false
 class Yao1YaoFragment : Fragment(), SensorEventListener {
     var index = 0;
@@ -344,7 +344,6 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-//        shakeDetector?.onSensorChanged(event)
         //Toast.makeText(requireContext(), "SHAKE~~~!!!!", Toast.LENGTH_SHORT).show()
         val type = event!!.sensor.type
         if (type == Sensor.TYPE_ACCELEROMETER) {
@@ -408,6 +407,10 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
                 }
             }
         } else {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), RequestCode)
+                return
+            }
             val storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM)
             val imageFile = File(storageDir, fileName)
 
@@ -426,6 +429,19 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             }
         }
     }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == RequestCode) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                //保存图片到相册
+                //SaveImage()
+            } else {
+                Toast.makeText(requireContext(), "你拒绝了该权限，无法保存图片！", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
 
     class MyHandler(activity: Yao1YaoFragment) : Handler() {
         private val mReference: WeakReference<Yao1YaoFragment>

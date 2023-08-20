@@ -8,10 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.yunshuting.eightdiagrams.R
-import com.yunshuting.eightdiagrams.databinding.ActivityDetailInfoBinding
 import com.yunshuting.eightdiagrams.databinding.FragmentYaoBinding
-import kotlinx.android.synthetic.main.fragment_yao.tv_yao_desc
 
 
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,8 +41,7 @@ class YaoFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentYaoBinding.inflate(layoutInflater)
         showYaoInfo()
-//        View view = binding.getRoot()
-        //return inflater.inflate(R.layout.fragment_yao, container, false)
+
         return binding.root
     }
 
@@ -83,17 +79,10 @@ class YaoFragment : Fragment() {
             .replace("\n","")
             .replace("\t","")
 
-        //<div style="text-align: center;">
-        //<img alt="http://img.fututa.com/bk/yao/1_5.png" src="http://www.zhouyi.cc/uploads/allimg/141114/3-141114151050464.png" style="width: 178px; height: 112px;"/></div>
-
         val regex = "<div style=\"text-align: center;\">(.*?)</div>".toRegex()
-        //val regex = "<img.*?src=\"(.*?)\".*?>".toRegex()
-        //val regex = "<img.*?/>".toRegex()
         val matchResult = regex.find(result)
         val imageUrl = matchResult?.groupValues?.get(1)
         if (!TextUtils.isEmpty(imageUrl)){
-            //result = str.replace(imageUrl!!,"@drawable/"+drawname)
-            //val imgpath = "file:///android_res/drawable/" + drawname+".png"
             val imgpath = "<img src=‘myimage’>"
             result = result.replace(imageUrl!!,imgpath)
             Log.i("licj",imgpath)

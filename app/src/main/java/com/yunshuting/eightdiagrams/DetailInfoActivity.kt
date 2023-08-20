@@ -1,23 +1,17 @@
 package com.yunshuting.eightdiagrams
 
 import android.os.Bundle
-import android.os.Environment
-import android.text.Html
 import android.text.TextUtils
 import android.util.Log
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
-import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabItem
-import com.google.android.material.tabs.TabLayout
 import com.yunshuting.eightdiagrams.databinding.ActivityDetailInfoBinding
 import com.yunshuting.eightdiagrams.mv.MyDBHelper
 import com.yunshuting.eightdiagrams.mv.MyFragmentPagerAdapter
 import com.yunshuting.eightdiagrams.ui.YaoFragment
-import java.io.File
 
 
 class DetailInfoActivity : AppCompatActivity() {
@@ -175,9 +169,6 @@ class DetailInfoActivity : AppCompatActivity() {
             .replace("\n","")
             .replace("\t","")
 
-        //<div style="text-align: center;">
-        //<img alt="http://img.fututa.com/bk/yao/1_5.png" src="http://www.zhouyi.cc/uploads/allimg/141114/3-141114151050464.png" style="width: 178px; height: 112px;"/></div>
-
         val regex = "<div style=\"text-align: center;\">(.*?)</div>".toRegex()
         //val regex = "<img.*?src=\"(.*?)\".*?>".toRegex()
         //val regex = "<img.*?/>".toRegex()
@@ -265,70 +256,6 @@ class DetailInfoActivity : AppCompatActivity() {
             tab.text = "用六"
             binding.tabLayout.addTab(tab)
         }
-//        binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-//                var bianId = 0
-//                var drawname=""
-//                var html = ""
-//                when(tab?.position ?: 0){
-//                    0-> {
-//                        html = yao1
-//                        drawname = "gua"+curGuaNum.toString()+"_1"
-//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-//                    }
-//                    1-> {
-//                        html = yao2
-//                        drawname = "gua"+curGuaNum.toString()+"_2"
-//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-//                    }
-//                    2-> {
-//                        html = yao3
-//                        drawname = "gua"+curGuaNum.toString()+"_3"
-//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-//                    }
-//                   3-> {
-//                       html = yao4
-//                       drawname = "gua"+curGuaNum.toString()+"_4"
-//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-//                    }
-//                    4-> {
-//                        html = yao5
-//                        drawname = "gua"+curGuaNum.toString()+"_5"
-//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-//                    }
-//                    5-> {
-//                        html = yao6
-//                        drawname = "gua"+curGuaNum.toString()+"_6"
-//                        bianId= getResources().getIdentifier(drawname,"drawable",packageName)
-//                    }
-//                    6-> {
-//                        html = yao7
-//                    }
-//                }
-//                if (bianId > 0) {
-//                    html = ChangeImg(html, drawname)
-//                    val text: CharSequence =
-//                        Html.fromHtml(html, Html.ImageGetter { source -> //根据图片资源ID获取图片
-//                            Log.d("source", source)
-//                            //换资源
-//                            if (source == "‘myimage’") {
-//                                val draw = resources.getDrawable(bianId)
-//                                draw.setBounds(0, 0, draw.intrinsicWidth, draw.intrinsicHeight)
-//                                return@ImageGetter draw
-//                            }
-//                            null
-//                        }, null)
-//                    //binding.tvYaoDesc.setText(text)
-//                } else {
-//                    //binding.tvYaoDesc.setText(html)
-//                }
-//
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {}
-//
-//            override fun onTabReselected(tab: TabLayout.Tab?) {}
-//        })
 
     }
 

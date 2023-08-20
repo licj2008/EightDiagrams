@@ -4,7 +4,6 @@ package com.yunshuting.eightdiagrams.mv
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
-import android.hardware.SensorManager
 
 class ShakeDetector(private val listener: OnShakeListener) : SensorEventListener {
     private var lastUpdate: Long = 0
