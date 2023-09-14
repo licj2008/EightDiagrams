@@ -13,7 +13,7 @@ class ShakeDetector(private val listener: OnShakeListener) : SensorEventListener
 
     companion object {
         private const val SHAKE_THRESHOLD_GRAVITY = 2.7f
-        private const val SHAKE_SLOP_TIME_MS = 500
+        private const val SHAKE_SLOP_TIME_MS = 200
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
@@ -29,19 +29,25 @@ class ShakeDetector(private val listener: OnShakeListener) : SensorEventListener
 
             lastUpdate = currentTime
 
-            val x = it.values[0]
-            val y = it.values[1]
-            val z = it.values[2]
+            if (it.values.size >= 3) {
+                val x = it.values[0]
+                val y = it.values[1]
+                val z = it.values[2]
 
-            val speed = Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000
+                val speed = if (diffTime != 0L) {
+                    Math.abs(x + y + z - lastX - lastY - lastZ) / diffTime * 10000
+                } else {
+                    0f
+                }
 
-            if (speed > SHAKE_THRESHOLD_GRAVITY) {
-                listener.onShake()
+                if (speed > SHAKE_THRESHOLD_GRAVITY) {
+                    listener.onShake()
+                }
+
+                lastX = x
+                lastY = y
+                lastZ = z
             }
-
-            lastX = x
-            lastY = y
-            lastZ = z
         }
     }
 

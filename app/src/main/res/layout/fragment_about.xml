@@ -20,7 +20,7 @@
             />
         <TextView
             android:id="@+id/tv_app_name"
-            android:text="周易64卦-摇卦APP（试用版）"
+            android:text="周易64卦-摇卦APP"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
@@ -38,13 +38,14 @@
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_app_author"
+            android:visibility="gone"
             android:text="开发者：尘"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/tv_app_yijian"
-            android:text="意见反馈：2882644@qq.com"
+            android:text="意见反馈：shlichengjun@gmail.com"
             android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>

@@ -53,7 +53,8 @@ val END_SHAKE:Int = 1002
 val RequestCode:Int = 1003
 var isshake = false
 class Yao1YaoFragment : Fragment(), SensorEventListener {
-    var index = 0;
+    var index = 0; //第几次摇
+    var dbid = 0; //数据库id
     var result = intArrayOf(-1, -1, -1, -1, -1, -1);
     var upDiagram: DiagramBean? = null;
     var downDiagram: DiagramBean? = null;
@@ -90,13 +91,16 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         binding.flipButton.setOnClickListener {
-            shake();
+            shake()
         }
         binding.resetButton.setOnClickListener {
-            reset();
+            reset()
         }
         binding.downloadButton.setOnClickListener {
-            downloadPic();
+            downloadPic()
+        }
+        binding.detailButton.setOnClickListener {
+            gotoDetail()
         }
         MyUtils.initDagramsData()
         val mAccelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -127,6 +131,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         binding.llCoins.visibility = View.VISIBLE
         binding.clDownload.visibility = View.GONE
         binding.downloadButton.visibility = View.GONE
+        binding.detailButton.visibility = View.GONE
     }
 
     fun downloadPic() {
@@ -168,10 +173,10 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
             return
         }
 
-        if (!(activity as HomeActivity).isInTryUse()) {
-            Toast.makeText(activity,"出了点问题，请联系开发者",Toast.LENGTH_LONG).show()
-            return
-        }
+//        if (!(activity as HomeActivity).isInTryUse()) {
+//            Toast.makeText(activity,"出了点问题，请联系开发者",Toast.LENGTH_LONG).show()
+//            return
+//        }
 
         val coin1 = flipCoin()
         val coin2 = flipCoin()
@@ -269,6 +274,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         Log.d("licj","getDataByid 666 ");
         while (cursor.moveToNext()) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow("num"))
+            dbid = id
             val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
             var guaxiang = cursor.getString(cursor.getColumnIndexOrThrow("guaxiang"))
             guaxiang = guaxiang.replace("，","\n").replace("。","\n")
@@ -284,9 +290,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
 //                binding.ivZygua?.context?.startActivity(intent)
 //            }
             binding.clDownload.setOnClickListener {
-                val intent = Intent( binding.ivZygua?.context, DetailInfoActivity::class.java)
-                intent.putExtra("guaNum", id)
-                binding.ivZygua?.context?.startActivity(intent)
+                gotoDetail()
             }
             // Handle query result here.
             binding.resultText.text = binding.resultText.text.toString() +"\n摇中：" +name
@@ -296,6 +300,12 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         }
 
         cursor.close()
+    }
+
+    private fun gotoDetail() {
+        val intent = Intent( binding.ivZygua?.context, DetailInfoActivity::class.java)
+        intent.putExtra("guaNum", dbid)
+        binding.ivZygua?.context?.startActivity(intent)
     }
 
     private fun showPoem(text:String) {
@@ -334,6 +344,7 @@ class Yao1YaoFragment : Fragment(), SensorEventListener {
         binding.tvDlDate.text = DateUtil.getCurTime()
         binding.tvBottom.text ="《易经卜卦》"
         binding.downloadButton.visibility = View.VISIBLE
+        binding.detailButton.visibility = View.VISIBLE
     }
 
     fun getScreenWidth(context: Context): Int {
